@@ -1,0 +1,25 @@
+name: 'Run Terraform Core'
+description: 'Composite action initialize a Terraform Cloud Environment & validate a given configuration.'
+inputs:
+  env:
+    description: 'Name of the Terraform Cloud Workspace to use.'
+    required: true
+  
+runs:
+  using: "composite"
+  steps:
+
+    - name: Format
+      id: fmt
+      run: terraform fmt -check
+      shell: bash
+      
+    - name: Initialize
+      id: init
+      run: TF_WORKSPACE=${{inputs.env}} terraform init
+      shell: bash
+      
+    - name: Validate
+      id: validate
+      run: TF_WORKSPACE=${{inputs.env}} terraform validate
+      shell: bash
